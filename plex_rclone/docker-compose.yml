@@ -1,0 +1,23 @@
+services:
+  plex:
+    image: lscr.io/linuxserver/plex
+    container_name: plex
+    network_mode: host
+    volumes:
+      - plex_config:/config
+      - webdrive:/media
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Taipei
+      - VERSION=public
+    restart: unless-stopped
+volumes:
+  plex_config:
+  webdrive:
+    driver: rclone
+    driver_opts:
+      remote: 'alist:'
+      allow_other: 'true'
+      vfs_cache_mode: 'full'
+      vfs_cache_max_size: '52G'
