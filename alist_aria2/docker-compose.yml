@@ -1,0 +1,48 @@
+services:
+  alist:
+    depends_on:
+      - aria2
+    image: xhofe/alist
+    container_name: alist
+    volumes:
+      - alist_data:/opt/alist/data
+    environment:
+      - PUID=0
+      - PGID=0
+      - UMASK=022
+    restart: unless-stopped
+  aria2:
+    image: hurlenko/aria2-ariang
+    container_name: aria2
+    volumes:
+      - alist_data:/opt/alist/data
+      - aria2_data:/aria2/data
+      - aria2_config:/aria2/config
+    environment:
+      - ARIA2RPCPORT=443
+      - RPC_SECRET=${RPC_SECRET:?error}
+      - BASIC_AUTH_USERNAME=${BASIC_AUTH_USERNAME:?error}
+      - BASIC_AUTH_PASSWORD=${BASIC_AUTH_PASSWORD:?error}
+    restart: unless-stopped
+  caddy:
+    depends_on:
+      - alist
+      - aria2
+    image: caddy
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    restart: unless-stopped
+volumes:
+  alist_data:
+  aria2_data:
+  aria2_config:
+  caddy_data:
+  caddy_config:

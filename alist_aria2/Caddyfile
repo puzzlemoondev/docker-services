@@ -1,0 +1,7 @@
+alist.puzzlemoon.dev {
+	reverse_proxy alist:5244
+}
+
+aria2.puzzlemoon.dev {
+	reverse_proxy aria2:8080
+}
