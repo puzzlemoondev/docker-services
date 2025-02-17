@@ -1,0 +1,37 @@
+services:
+  komga:
+    image: gotson/komga
+    container_name: komga
+    volumes:
+      - komga_config:/config
+      - webdrive:/data
+    user: '1000:1000'
+    environment:
+      - TZ=Asia/Taipei
+    restart: unless-stopped
+  caddy:
+    depends_on:
+      - komga
+    image: caddy
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    restart: unless-stopped
+volumes:
+  caddy_data:
+  caddy_config:
+  komga_config:
+  webdrive:
+    driver: rclone
+    driver_opts:
+      remote: 'alist:'
+      allow_other: 'true'
+      vfs_cache_mode: 'full'
+      vfs_cache_max_size: '1G'

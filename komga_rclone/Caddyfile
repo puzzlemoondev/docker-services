@@ -1,0 +1,3 @@
+komga.puzzlemoon.dev {
+	reverse_proxy komga:25600
+}
