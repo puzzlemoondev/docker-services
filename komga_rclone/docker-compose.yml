@@ -3,7 +3,9 @@ services:
     image: gotson/komga
     container_name: komga
     volumes:
-      - komga_config:/config
+      - type: bind
+        source: ./komga_config
+        target: /config
       - webdrive:/data
     user: '1000:1000'
     environment:
