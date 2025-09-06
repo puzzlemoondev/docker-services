@@ -1,0 +1,38 @@
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin
+    container_name: jellyfin
+    volumes:
+      - jellyfin_config:/config
+      - webdrive:/data
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Taipei
+    restart: unless-stopped
+  caddy:
+    depends_on:
+      - jellyfin
+    image: caddy
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    restart: unless-stopped
+volumes:
+  caddy_data:
+  caddy_config:
+  jellyfin_config:
+  webdrive:
+    driver: rclone
+    driver_opts:
+      remote: 'alist:'
+      allow_other: 'true'
+      vfs_cache_mode: 'full'
+      vfs_cache_max_size: '52G'
