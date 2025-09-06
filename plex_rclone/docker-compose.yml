@@ -21,3 +21,4 @@ volumes:
       allow_other: 'true'
       vfs_cache_mode: 'full'
       vfs_cache_max_size: '52G'
+      poll-interval: '0'
