@@ -8,6 +8,8 @@ services:
       - PUID=0
       - PGID=0
       - UMASK=022
+    ports:
+      - "5244:5244"
     restart: unless-stopped
   jellyfin:
     depends_on:
