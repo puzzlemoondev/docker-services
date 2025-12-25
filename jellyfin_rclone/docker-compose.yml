@@ -1,5 +1,17 @@
 services:
+  alist:
+    image: xhofe/alist
+    container_name: alist
+    volumes:
+      - alist_data:/opt/alist/data
+    environment:
+      - PUID=0
+      - PGID=0
+      - UMASK=022
+    restart: unless-stopped
   jellyfin:
+    depends_on:
+      - alist
     image: lscr.io/linuxserver/jellyfin
     container_name: jellyfin
     volumes:
@@ -12,6 +24,7 @@ services:
     restart: unless-stopped
   caddy:
     depends_on:
+      - alist
       - jellyfin
     image: caddy
     volumes:
@@ -21,19 +34,20 @@ services:
     cap_add:
       - NET_ADMIN
     ports:
-      - '80:80'
-      - '443:443'
-      - '443:443/udp'
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
     restart: unless-stopped
 volumes:
+  alist_data:
   caddy_data:
   caddy_config:
   jellyfin_config:
   webdrive:
     driver: rclone
     driver_opts:
-      remote: 'alist:'
-      allow_other: 'true'
-      vfs_cache_mode: 'full'
-      vfs_cache_max_size: '52G'
-      poll-interval: '0'
+      remote: "alist:"
+      allow_other: "true"
+      vfs_cache_mode: "full"
+      vfs_cache_max_size: "52G"
+      poll-interval: "0"
