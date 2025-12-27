@@ -4,7 +4,7 @@ services:
     container_name: openlist
     volumes:
       - openlist_data:/opt/openlist/data
-    user: "1000:1000"
+    user: "1001:1001"
     environment:
       - TZ=Asia/Taipei
     ports:
