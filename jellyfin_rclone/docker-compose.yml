@@ -1,19 +1,18 @@
 services:
-  alist:
-    image: xhofe/alist
-    container_name: alist
+  openlist:
+    image: openlistteam/openlist:latest-aio
+    container_name: openlist
     volumes:
-      - alist_data:/opt/alist/data
+      - openlist_data:/opt/openlist/data
+    user: "1000:1000"
     environment:
-      - PUID=0
-      - PGID=0
-      - UMASK=022
+      - TZ=Asia/Taipei
     ports:
       - "5244:5244"
     restart: unless-stopped
   jellyfin:
     depends_on:
-      - alist
+      - openlist
     image: lscr.io/linuxserver/jellyfin
     container_name: jellyfin
     volumes:
@@ -26,7 +25,7 @@ services:
     restart: unless-stopped
   caddy:
     depends_on:
-      - alist
+      - openlist
       - jellyfin
     image: caddy
     volumes:
@@ -41,7 +40,7 @@ services:
       - "443:443/udp"
     restart: unless-stopped
 volumes:
-  alist_data:
+  openlist_data:
   caddy_data:
   caddy_config:
   jellyfin_config:

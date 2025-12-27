@@ -2,6 +2,6 @@ jellyfin.puzzlemoon.dev {
 	reverse_proxy jellyfin:8096
 }
 
-alist.puzzlemoon.dev {
-	reverse_proxy alist:5244
+openlist.puzzlemoon.dev {
+	reverse_proxy openlist:5244
 }
